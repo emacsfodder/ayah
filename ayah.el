@@ -4,7 +4,7 @@
 ;;
 ;; URL: https://github.com/emacsfodder/ayah
 ;; Version: 0.1.0
-;; Package-Requires: ((auto-yasnippet "0.14.0"))
+;; Package-Requires: ((auto-yasnippet "0.3.0"))
 ;;
 ;; This file is not part of GNU Emacs
 ;;
@@ -34,16 +34,7 @@
 ;; Install with straight.el.
 ;;
 ;; ```emacs
-;; (straight-use-package) ;;  TODO
-;; ```
-;;
-;; ### Install on Doom Emacs
-;;
-;; Doom Emacs ships with abo-abo/auto-snippet.  To use this fork add this to `package.el`:
-;;
-;; ```emacs
-;; (unpin! auto-yasnippet)
-;; (package! auto-yasnippet :recipe (:host github :repo "emacsfodder/auto-yasnippet"))
+;; TODO
 ;; ```
 ;;
 ;; ## Configuration
