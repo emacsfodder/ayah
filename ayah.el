@@ -4,7 +4,7 @@
 ;;
 ;; URL: https://github.com/emacsfodder/ayah
 ;; Version: 0.1.0
-;; Package-Requires: ((auto-yasnippet "0.3.0"))
+;; Package-Requires: ((auto-yasnippet "0.3.0") (emacs "27.1"))
 ;;
 ;; This file is not part of GNU Emacs
 ;;
@@ -77,6 +77,10 @@
 
 (require 'auto-yasnippet)
 
+test this
+
+thhisi this
+
 (defvar ayah-history '()
   "A List of auto yasnippets created in this session.")
 
@@ -89,6 +93,11 @@ Also append the new value of `aya-current' to `ayah-history'."
   (let ((escaped-snippet (ayah--escape-snippet snippet)))
    (setq ayah-history (append ayah-history `(,escaped-snippet)))
    (setq aya-current escaped-snippet)))
+
+;;;###autoload
+(advice-add 'aya-create
+            :after
+            (lambda (&optional _ _) (ayah--set-current aya-current)))
 
 ;;;###autoload
 (defun ayah-expand-from-history (&optional prefix)
