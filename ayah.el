@@ -3,7 +3,7 @@
 ;; Author: Jason Milkins <jasonm23@gmail.com>
 ;;
 ;; URL: https://github.com/emacsfodder/ayah
-;; Version: 0.1.0
+;; Version: 0.2.0
 ;; Package-Requires: ((auto-yasnippet "0.3.0") (emacs "27.1"))
 ;;
 ;; This file is not part of GNU Emacs
