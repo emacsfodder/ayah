@@ -15,15 +15,27 @@ _Ayah is pending addition to MELPA._
 
 Install usinng [straight.el](https://github.com/radian-software/straight.el)
 
-```emacs
+```lisp
 (straight-use-package
  '(ayah :type git :host github :repo "emacsfodder/ayah"))
 ```
 
 Install with [Doom](https://github.com/doomemacs) Emacs.
 
-```emacs
+```lisp
 (package! ayah :recipe (:host github :repo "emacsfodder/ayah"))
+```
+# Setup
+
+The first time you try to access any history features _Ayah_ will hook up to Auto-yasnippet.
+
+To manually initialize call `(ayah-setup)`, for example:
+
+```lisp
+(use-package auto-snippet
+  :config 
+  (require 'ayah)
+  (ayah-setup))
 ```
 
 # Usage
@@ -58,7 +70,7 @@ In your Emacs init file bind keys to the `ayah` commands.
 
 For example:
 
-```emacs
+```lisp
 (bind-key "C-c C-y SPC" #'ayah-expand-from-history)
 (bind-key "C-c C-y d"   #'ayah-delete-from-history)
 (bind-key "C-c C-a n"   #'ayah-next-in-history)
