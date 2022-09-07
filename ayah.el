@@ -1,11 +1,17 @@
-
 ;;; ayah.el --- History extensions for auto-yasnippet -*- lexical-binding: t; -*-
 ;;
 ;; Author: Jason Milkins <jasonm23@gmail.com>
 ;;
+;; Copyright (C) Free Software Foundation 2021,2022
+;;
 ;; URL: https://github.com/emacsfodder/ayah
-;; Version: 0.3.0
+;; Version: 0.4.0
 ;; Package-Requires: ((auto-yasnippet "0.3.0") (emacs "27.1"))
+;; Keywords: extensions history
+;;
+;;; History:
+;; Sept 2022: Released
+;; July 2022: Created
 ;;
 ;; This file is not part of GNU Emacs
 ;;
@@ -29,7 +35,7 @@
 ;;; Commentary:
 ;; # Ayah
 ;;
-;; Ayah provides [auto-yasnippet](https://github.com/abo-abo/auto-yasnippet) with snippet history features.
+;; Ayah extends [auto-yasnippet](https://github.com/abo-abo/auto-yasnippet) with history features.
 ;;
 ;; - Expand a snippet from history
 ;; - Persist a snippet from history
@@ -82,13 +88,15 @@
 ;;
 ;; In your Emacs init file bind keys to the `ayah' commands.
 ;;
-;; ```emacs
-;; (bind-keys "C-c C-y SPC" #'ayah-expand-from-history)
-;;            "C-c C-y d"   #'ayah-delete-from-history)
-;;            "C-c C-a n"   #'ayah-next-in-history)
-;;            "C-c C-a p"   #'ayah-previous-in-history)
-;;            "C-c C-y s"   #'ayah-persist-snippet)
-;; ```
+;; ```lisp
+;; (global-set-key (kbd "C-c C-a SPC") 'ayah-expand-from-history)
+;; (global-set-key (kbd "C-c C-a n") 'ayah-next-in-history)
+;; (global-set-key (kbd "C-c C-a p") 'ayah-previous-in-history)
+;; (global-set-key (kbd "C-c C-a C") 'ayah-clear-history)
+;; (global-set-key (kbd "C-c C-a D") 'ayah-delete-from-history)
+;; (global-set-key (kbd "C-c C-a W") 'ayah-persist-snippet-from-history)
+;; '```
+;; These specific bindings can be set with `ayah-default-bindings'
 ;;
 ;;; Code:
 
@@ -106,6 +114,33 @@
   (setq ayah-history nil)
   (setq aya-current nil))
 
+(defun ayah-default-bindings ()
+  "Setup default key bindings for ayah.)
+
+Prefix C-c C-a:
+SPC - expand from history
+n - next in history
+p - previous in history
+C - clear history
+D - delete from history
+W - persist snippet from history
+
+Note: The bindings are currently set to:
+\\[ayah-expand-from-history] - Expand from history
+\\[ayah-next-in-history] - Next in history
+\\[ayah-previous-in-history] - Previous in history
+\\[ayah-clear-history] - Clear history
+\\[ayah-delete-from-history] - Delete from history
+\\[ayah-persist-snippet-from-history] - Persist snippet from history"
+
+  (interactive)
+  (global-set-key (kbd "C-c C-a SPC") 'ayah-expand-from-history)
+  (global-set-key (kbd "C-c C-a n") 'ayah-next-in-history)
+  (global-set-key (kbd "C-c C-a p") 'ayah-previous-in-history)
+  (global-set-key (kbd "C-c C-a C") 'ayah-clear-history)
+  (global-set-key (kbd "C-c C-a D") 'ayah-delete-from-history)
+  (global-set-key (kbd "C-c C-a W") 'ayah-persist-snippet-from-history))
+
 (defun ayah--set-current (snippet)
   "Wrap setq `aya-current' to SNIPPET.
 Also append the new value of `aya-current' to `ayah-history'."
@@ -118,19 +153,18 @@ Also append the new value of `aya-current' to `ayah-history'."
   "Initialize ayah, called when we first try to access history.
 
 If we have an existing snippet in `aya-current' we push it back
-through `aya-create' after advising that function."
+through `ayah--set-current' after advising `aya-create'."
   (advice-add #'aya-create
               :after
               #'ayah--augment-aya-create)
-  (when (and aya-current
-          (= 0 (length ayah-history)))
-   (aya-create aya-current)))
+  (unless (equal aya-current (car ayah-history))
+   (ayah--set-current aya-current)))
 
 (defun ayah--augment-aya-create (_  _)
   "Enable history by advising `aya-create'."
    (ayah--set-current aya-current))
 
-(defun ayah--initialized-p  ()
+(defun ayah-initialized-p  ()
   "Non-nil if auto-snippet history is initialized."
   (advice-member-p 'ayah--augment-aya-create #'aya-create))
 

@@ -1,19 +1,31 @@
 # Ayah
 
-Ayah provides [auto-yasnippet](https://github.com/abo-abo/auto-yasnippet) with
+Ayah extends [auto-yasnippet](https://github.com/abo-abo/auto-yasnippet) with
 snippet history features.
 
 - Expand a snippet from history
 - Persist a snippet from history
 
-There are additional commands to move through (next/previous) history and delete
-a snippet from history.
+To manage history there are also commands (next/previous) in history, delete
+a snippet from history and clear history.
 
 ## Install
 
 _Ayah is pending addition to MELPA._
 
-Install usinng [straight.el](https://github.com/radian-software/straight.el)
+Install manually. Clone to your machine:
+
+```sh
+git clone https://github.com/emacsfodder/ayah
+```
+Add this to your Emacs init:
+```lisp
+(add-to-list 'load-path "/path/to/ayah") 
+(require 'ayah)
+```
+- - - 
+
+Install using [straight.el](https://github.com/radian-software/straight.el)
 
 ```lisp
 (straight-use-package
@@ -71,9 +83,15 @@ In your Emacs init file bind keys to the `ayah` commands.
 For example:
 
 ```lisp
-(bind-key "C-c C-y SPC" #'ayah-expand-from-history)
-(bind-key "C-c C-y d"   #'ayah-delete-from-history)
-(bind-key "C-c C-a n"   #'ayah-next-in-history)
-(bind-key "C-c C-a p"   #'ayah-previous-in-history)
-(bind-key "C-c C-y s"   #'ayah-persist-snippet)
+(global-set-key (kbd "C-c C-a SPC") 'ayah-expand-from-history)
+(global-set-key (kbd "C-c C-a n") 'ayah-next-in-history)
+(global-set-key (kbd "C-c C-a p") 'ayah-previous-in-history)
+(global-set-key (kbd "C-c C-a C") 'ayah-clear-history)
+(global-set-key (kbd "C-c C-a D") 'ayah-delete-from-history)
+(global-set-key (kbd "C-c C-a W") 'ayah-persist-snippet-from-history))
+```
+You can set the key bindings to those above using:
+
+```lisp
+M-x ayah-default-bindings
 ```
